@@ -1,15 +1,17 @@
 //
 // Created by Sobhan on 7/9/2021.
 //
+#include "utils.c"
 #include <windows.h>
 
-typedef int boolean_32;
+struct {
+    int width, height;
+    u32 *pixels;
+    BITMAPINFO bitmap_info;
 
-#define true 1
-#define false 0
+} typedef Render_Buffer;
 
-#define global_variable static
-#define internal static
+Render_Buffer render_buffer;
 
 global_variable boolean_32 isRunning = true;
 
@@ -24,9 +26,12 @@ internal LRESULT window_callback(_In_ HWND window, _In_ UINT message, _In_ WPARA
         case WM_DESTROY:
         {
             isRunning = false;
-        }
-        break;
-
+        } break;
+        case WM_SIZE: {
+            //Get width and height
+            //allocate the buffer
+            //fill the bitmap_info
+        } break;
         default:
         {
             result = DefWindowProcA(window, message, w_param, l_param);
@@ -49,14 +54,26 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     RegisterClassA(&window_class);
     HWND window = CreateWindowExA(0, window_class.lpszClassName, "Pong-Breakout",
                                   WS_VISIBLE | WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, 0, 0, 0, 0);
+    //Get Device Context
+    HDC hdc = GetDC(window);
 
     while (isRunning)
     {
+        //Input
         MSG message;
         while (PeekMessageA(&message, window, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&message);
             DispatchMessage(&message);
         }
+
+        //Simulation
+
+
+        //Render:
+            //TODO: Buffer (Memory) -> Draw to it (up to the game)
+            //Use the buffer (draw) -> StretchDIBits
+        StretchDIBits(hdc, 0, 0, render_buffer.width, render_buffer.height, 0, 0, render_buffer.width, render_buffer.height, render_buffer.pixels, &render_buffer.bitmap_info, DIB_RGB_COLORS, SRCCOPY);
+
     }
 }

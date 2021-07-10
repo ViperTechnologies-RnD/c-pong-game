@@ -28,7 +28,12 @@ internal LRESULT window_callback(_In_ HWND window, _In_ UINT message, _In_ WPARA
             isRunning = false;
         } break;
         case WM_SIZE: {
+
             //Get width and height
+            RECT rect;
+            GetWindowRect(window, &rect);
+            render_buffer.width = rect.right - rect.left;
+            render_buffer.height = rect.bottom - rect.top;
             //allocate the buffer
             //fill the bitmap_info
         } break;

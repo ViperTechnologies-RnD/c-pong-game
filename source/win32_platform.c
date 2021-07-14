@@ -11,7 +11,7 @@ struct {
 
 } typedef Render_Buffer;
 
-Render_Buffer render_buffer;
+global_variable Render_Buffer render_buffer;
 
 global_variable boolean_32 isRunning = true;
 
@@ -30,10 +30,12 @@ internal LRESULT window_callback(_In_ HWND window, _In_ UINT message, _In_ WPARA
         case WM_SIZE: {
 
             //Get width and height
+            
             RECT rect;
             GetWindowRect(window, &rect);
             render_buffer.width = rect.right - rect.left;
             render_buffer.height = rect.bottom - rect.top;
+            
             //allocate the buffer
 
             if (render_buffer.pixels) {
@@ -44,7 +46,16 @@ internal LRESULT window_callback(_In_ HWND window, _In_ UINT message, _In_ WPARA
             //to allocate a big chunk of memory instead of using the standard 
             //malloc
             render_buffer.pixels = VirtualAlloc(0, sizeof(u32)*render_buffer.width*render_buffer.height,MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+            
             //fill the bitmap_info
+
+            render_buffer.bitmap_info.bmiHeader.biSize = sizeof(render_buffer.bitmap_info.bmiHeader);
+            render_buffer.bitmap_info.bmiHeader.biWidth = render_buffer.width;
+            render_buffer.bitmap_info.bmiHeader.biHeight = render_buffer.height;
+            render_buffer.bitmap_info.bmiHeader.biPlanes = 1;
+            render_buffer.bitmap_info.bmiHeader.biBitCount = 32;
+            render_buffer.bitmap_info.bmiHeader.biCompression = BI_RGB;
+            
         } break;
         default:
         {

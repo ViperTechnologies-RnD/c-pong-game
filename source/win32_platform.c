@@ -3,6 +3,8 @@
 //
 #include "utils.c"
 
+#include "math.c"
+
 #include <windows.h>
 
 struct {

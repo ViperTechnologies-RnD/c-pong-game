@@ -96,8 +96,18 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         MSG message;
         while (PeekMessageA(&message, window, 0, 0, PM_REMOVE))
         {
-            TranslateMessage(&message);
-            DispatchMessage(&message);
+            switch (message.message)
+            {
+                case WM_KEYDOWN:
+                case WM_KEYUP: {
+
+                } break;
+                
+                default: {
+                    TranslateMessage(&message);
+                    DispatchMessage(&message);
+                } break;
+            }
         }
 
         //Simulation

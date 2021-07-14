@@ -101,7 +101,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         //Simulation
         clear_screen(0x551100);
 
-        draw_rect_in_pixels(50, 50, 150, 200, 0xffff00);
+        draw_rect_in_pixels(50, 50, 100, 100, 0xffff00);
 
         //Render:
             //TODO: Buffer (Memory) -> Draw to it (up to the game)

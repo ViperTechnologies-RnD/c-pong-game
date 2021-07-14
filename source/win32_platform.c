@@ -2,11 +2,15 @@
 // Created by Sobhan on 7/9/2021.
 //
 #include "utils.c"
+
 #include <windows.h>
 
 struct {
+    //Platform non-specific part
     int width, height;
     u32 *pixels;
+
+    //Platform specific part
     BITMAPINFO bitmap_info;
 
 } typedef Render_Buffer;
@@ -14,6 +18,8 @@ struct {
 global_variable Render_Buffer render_buffer;
 
 global_variable boolean_32 isRunning = true;
+
+#include "soft_rendering.c"
 
 internal LRESULT window_callback(_In_ HWND window, _In_ UINT message, _In_ WPARAM w_param, _In_ LPARAM l_param)
 {
@@ -30,7 +36,7 @@ internal LRESULT window_callback(_In_ HWND window, _In_ UINT message, _In_ WPARA
         case WM_SIZE: {
 
             //Get width and height
-            
+
             RECT rect;
             GetWindowRect(window, &rect);
             render_buffer.width = rect.right - rect.left;
@@ -93,7 +99,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         }
 
         //Simulation
+        clear_screen(0x551100);
 
+        draw_rect_in_pixels(50, 50, 150, 200, 0xffff00);
 
         //Render:
             //TODO: Buffer (Memory) -> Draw to it (up to the game)

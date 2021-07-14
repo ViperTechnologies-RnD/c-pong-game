@@ -35,6 +35,15 @@ internal LRESULT window_callback(_In_ HWND window, _In_ UINT message, _In_ WPARA
             render_buffer.width = rect.right - rect.left;
             render_buffer.height = rect.bottom - rect.top;
             //allocate the buffer
+
+            if (render_buffer.pixels) {
+                //free
+                VirtualFree(render_buffer.pixels, 0, MEM_RELEASE);
+            }
+            //since we are at windows platform we can use virtualalloc
+            //to allocate a big chunk of memory instead of using the standard 
+            //malloc
+            render_buffer.pixels = VirtualAlloc(0, sizeof(u32)*render_buffer.width*render_buffer.height,MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
             //fill the bitmap_info
         } break;
         default:
